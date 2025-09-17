@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lista de Presentes - Pinel & Vivi</title>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
@@ -10,97 +10,123 @@
       emailjs.init("-U-0HzXMAuDVs9P0m"); // Substitua pelo seu User ID real após criar a conta no EmailJS
     })();
   </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #fdfdfb;
-      color: #2e4634;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom, #f1f6f3, #e8f0e8);
+      color: #4a4a4a;
       line-height: 1.6;
     }
     header {
       text-align: center;
-      padding: 2rem 1rem 1rem;
-      border-bottom: 1px solid #dbe4dc;
+      padding: 3rem 1rem 1.5rem;
+      background: #ffffff;
+      border-bottom: 2px solid #a9c6b5;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     header h1 {
-      font-family: 'Georgia', serif;
-      font-size: 2.2rem;
+      font-family: 'Parisienne', cursive;
+      font-size: 3rem;
       margin: 0;
-      color: #2e4634;
+      color: #567148; /* Cor primária */
     }
     header p {
-      font-size: 1.2rem;
-      margin-top: .4rem;
-      color: #3f5e47;
+      font-size: 1.25rem;
+      margin-top: 0.5rem;
+      color: #6b7280;
     }
     .container {
       max-width: 900px;
       margin: 2rem auto;
-      padding: 0 1rem;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border: 2px solid #a9c6b5;
     }
     .filter-section {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       text-align: center;
     }
+    .filter-section label {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #4a4a4a;
+    }
     .filter-section select {
-      padding: 0.5rem;
+      padding: 0.75rem;
       font-size: 1rem;
-      border-radius: 5px;
+      border-radius: 8px;
       border: 1px solid #a9c6b5;
       background: #fff;
+      width: 100%;
+      max-width: 300px;
+      margin-top: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .filter-section select:focus {
+      outline: none;
+      border-color: #567148;
+      box-shadow: 0 0 0 3px rgba(86, 113, 72, 0.2);
     }
     .status {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       font-size: 1.1rem;
-      color: #37523d;
+      color: #567148;
+      font-weight: 500;
     }
     h2 {
-      font-family: 'Georgia', serif;
-      font-size: 1.5rem;
+      font-family: 'Parisienne', cursive;
+      font-size: 2.5rem;
+      font-weight: 700;
       border-bottom: 2px solid #a9c6b5;
-      padding-bottom: .3rem;
-      margin-top: 2rem;
-      color: #37523d;
+      padding-bottom: 0.5rem;
+      margin-top: 2.5rem;
+      color: #567148;
     }
     ul {
       list-style: none;
       padding-left: 0;
-      margin: 1rem 0;
+      margin: 1.5rem 0;
     }
     ul li {
-      background: #ffffff;
-      padding: .7rem 1rem;
-      margin-bottom: .5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      transition: transform .2s ease;
+      background: #f1f6f3;
+      padding: 1rem 1.5rem;
+      margin-bottom: 0.75rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     ul li:hover {
-      transform: translateX(4px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
     ul li.reserved {
-      background: #e0e0e0;
+      background: #e5e7eb;
       opacity: 0.7;
     }
     ul li button {
-      padding: 0.5rem 1rem;
-      background: #a9c6b5;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(to right, #567148, #a9c6b5);
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-    ul li button:hover {
-      background: #8ab89c;
+    ul li button:hover:not(:disabled) {
+      background: linear-gradient(to right, #4a5f3e, #8ab89c);
+      transform: scale(1.05);
     }
     ul li button:disabled {
-      background: #ccc;
+      background: #d1d5db;
       cursor: not-allowed;
     }
     .modal {
@@ -110,60 +136,112 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
     .modal-content {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      max-width: 400px;
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 16px;
+      max-width: 450px;
       width: 90%;
       text-align: center;
+      border: 2px solid #a9c6b5;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
-    .modal-content input, .modal-content textarea {
+    .modal-content h3 {
+      font-family: 'Parisienne', cursive;
+      font-size: 1.8rem;
+      color: #567148;
+      margin-bottom: 1rem;
+    }
+    .modal-content input,
+    .modal-content textarea {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       margin: 0.5rem 0;
       border: 1px solid #a9c6b5;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+      outline: none;
+      border-color: #567148;
+      box-shadow: 0 0 0 3px rgba(86, 113, 72, 0.2);
     }
     .modal-content textarea {
       height: 100px;
       resize: vertical;
     }
     .modal-content button {
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1.5rem;
       margin: 0.5rem;
-      background: #a9c6b5;
+      background: linear-gradient(to right, #567148, #a9c6b5);
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
     .modal-content button:hover {
-      background: #8ab89c;
+      background: linear-gradient(to right, #4a5f3e, #8ab89c);
+      transform: scale(1.05);
     }
     footer {
       text-align: center;
       padding: 2rem 1rem;
       margin-top: 3rem;
-      border-top: 1px solid #dbe4dc;
-      color: #3f5e47;
+      border-top: 2px solid #a9c6b5;
+      color: #6b7280;
+    }
+    footer p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .heart-icon {
+      color: #567148;
+      margin-left: 8px;
+      font-size: 1.2rem;
     }
     .bank {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       background: #f1f6f3;
-      padding: 1rem;
-      border-radius: 8px;
+      padding: 1.5rem;
+      border-radius: 12px;
       text-align: left;
       display: inline-block;
+      border: 1px solid #a9c6b5;
     }
-    .bank strong { 
-      display: block; 
-      margin-top: .5rem; 
-      color: #2e4634; 
+    .bank strong {
+      display: block;
+      margin-top: 0.75rem;
+      color: #4a4a4a;
+      font-weight: 500;
+    }
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+      ul li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      ul li button {
+        width: 100%;
+        text-align: center;
+      }
+      .modal-content {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -271,8 +349,8 @@
 
     <h2>Contribuições em numerário</h2>
     <div class="bank">
-      <p><strong>Titular:</strong> Pinel Cuetule<br/>BCI NIB: 000800000000000000000</p>
-      <p><strong>Titular:</strong> Avelina Madala<br/>BIM NIB: 000100000000000000000</p>
+      <p><strong>Titular:</strong> Pinel Cuetule<br>BCI NIB: 000800000000000000000</p>
+      <p><strong>Titular:</strong> Avelina Madala<br>BIM NIB: 000100000000000000000</p>
     </div>
   </div>
 
@@ -288,7 +366,7 @@
   </div>
 
   <footer>
-    <p>Obrigado por partilhar este momento especial connosco ❤</p>
+    <p>Obrigado por partilhar este momento especial connosco <span class="heart-icon">❤</span></p>
   </footer>
 
   <script>
