@@ -347,7 +347,7 @@
       <li data-gift="Espreguiçadeiras">Espreguiçadeiras <button onclick="showModal('Espreguiçadeiras', 'Jardim')">Reservar</button></li>
     </ul>
 
-    <h2>Contribuições em numerário</h2>
+    <h2>Presente em numerário</h2>
     <div class="bank">
       <p><strong>Titular:</strong> Pinel Cuetule<br>BCI NIB: 000800000000000000000</p>
       <p><strong>Titular:</strong> Avelina Madala<br>BIM NIB: 000100000000000000000</p>
@@ -381,7 +381,7 @@
         if (reservations[gift]) {
           item.classList.add('reserved');
           item.querySelector('button').disabled = true;
-          item.querySelector('button').textContent = `Reservado por ${reservations[gift].name}${reservations[gift].comment ? ' (Comentário: ' + reservations[gift].comment + ')' : ''}`;
+          //item.querySelector('button').textContent = `Reservado por ${reservations[gift].name}${reservations[gift].comment ? ' (Comentário: ' + reservations[gift].comment + ')' : ''}`;
         }
       });
       updateAvailableCount();
@@ -418,7 +418,7 @@
       const item = document.querySelector(`li[data-gift="${currentGift}"]`);
       item.classList.add('reserved');
       item.querySelector('button').disabled = true;
-      item.querySelector('button').textContent = `Reservado por ${guestName}${guestComment ? ' (Comentário: ' + guestComment + ')' : ''}`;
+      //item.querySelector('button').textContent = `Reservado por ${guestName}${guestComment ? ' (Comentário: ' + guestComment + ')' : ''}`;
 
       // Enviar e-mail de confirmação via EmailJS
       const templateParams = {
@@ -434,7 +434,7 @@
           alert('Reserva confirmada! Um e-mail de notificação foi enviado automaticamente para os noivos.');
         }, function(error) {
           console.log('Erro ao enviar e-mail:', error);
-          alert('Reserva confirmada, mas houve um erro ao enviar o e-mail. Verifique o console para detalhes. (Use dados dummy, configure sua conta EmailJS para funcionar.)');
+          alert('Reserva confirmada, mas houve um erro ao enviar o e-mail.');
         });
 
       closeModal();
