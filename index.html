@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lista de Presentes - Pinel & Vivi</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("user_dummy_123456789"); // Substitua pelo seu User ID real após criar a conta no EmailJS
+    })();
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdfdfb;
+      color: #2e4634;
+      line-height: 1.6;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      border-bottom: 1px solid #dbe4dc;
+    }
+    header h1 {
+      font-family: 'Georgia', serif;
+      font-size: 2.2rem;
+      margin: 0;
+      color: #2e4634;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: .4rem;
+      color: #3f5e47;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .filter-section {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .filter-section select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #a9c6b5;
+      background: #fff;
+    }
+    .status {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: #37523d;
+    }
+    h2 {
+      font-family: 'Georgia', serif;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #a9c6b5;
+      padding-bottom: .3rem;
+      margin-top: 2rem;
+      color: #37523d;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 1rem 0;
+    }
+    ul li {
+      background: #ffffff;
+      padding: .7rem 1rem;
+      margin-bottom: .5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform .2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul li:hover {
+      transform: translateX(4px);
+    }
+    ul li.reserved {
+      background: #e0e0e0;
+      opacity: 0.7;
+    }
+    ul li button {
+      padding: 0.5rem 1rem;
+      background: #a9c6b5;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    ul li button:hover {
+      background: #8ab89c;
+    }
+    ul li button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal-content input, .modal-content textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #a9c6b5;
+      border-radius: 5px;
+    }
+    .modal-content textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    .modal-content button {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      background: #a9c6b5;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .modal-content button:hover {
+      background: #8ab89c;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      border-top: 1px solid #dbe4dc;
+      color: #3f5e47;
+    }
+    .bank {
+      margin-top: 1rem;
+      background: #f1f6f3;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: left;
+      display: inline-block;
+    }
+    .bank strong { 
+      display: block; 
+      margin-top: .5rem; 
+      color: #2e4634; 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lista de Presentes</h1>
+    <p>Pinel & Vivi — 15 de Novembro de 2025</p>
+  </header>
+
+  <div class="container">
+    <div class="filter-section">
+      <label for="category-filter">Filtrar por categoria: </label>
+      <select id="category-filter">
+        <option value="all">Todas as Categorias</option>
+        <option value="Sala">Sala</option>
+        <option value="Quarto do casal">Quarto do casal</option>
+        <option value="Cozinha">Cozinha</option>
+        <option value="Decoração">Decoração</option>
+        <option value="Lavanderia">Lavanderia</option>
+        <option value="Jardim">Jardim</option>
+      </select>
+    </div>
+    <div class="status" id="status">Presentes disponíveis: <span id="available-count"></span></div>
+
+    <h2>Sala</h2>
+    <ul data-category="Sala">
+      <li data-gift="Televisão Smart">Televisão Smart <button onclick="showModal('Televisão Smart', 'Sala')">Reservar</button></li>
+      <li data-gift="Home Theater">Home Theater <button onclick="showModal('Home Theater', 'Sala')">Reservar</button></li>
+      <li data-gift="Divã">Divã <button onclick="showModal('Divã', 'Sala')">Reservar</button></li>
+      <li data-gift="AC-Sala">AC <button onclick="showModal('AC-Sala', 'Sala')">Reservar</button></li>
+    </ul>
+
+    <h2>Quarto do casal</h2>
+    <ul data-category="Quarto do casal">
+      <li data-gift="Cama king">Cama king <button onclick="showModal('Cama king', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Guarda-roupa">Guarda-roupa <button onclick="showModal('Guarda-roupa', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Cômoda">Cômoda <button onclick="showModal('Cômoda', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Sapateira">Sapateira <button onclick="showModal('Sapateira', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Penteadeira">Penteadeira <button onclick="showModal('Penteadeira', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Jogo de lençol">Jogo de lençol <button onclick="showModal('Jogo de lençol', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Edredom">Edredom <button onclick="showModal('Edredom', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Roupões">Roupões <button onclick="showModal('Roupões', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="Travesseiros">Travesseiros <button onclick="showModal('Travesseiros', 'Quarto do casal')">Reservar</button></li>
+      <li data-gift="AC-Quarto">AC <button onclick="showModal('AC-Quarto', 'Quarto do casal')">Reservar</button></li>
+    </ul>
+
+    <h2>Cozinha</h2>
+    <ul data-category="Cozinha">
+      <li data-gift="Geladeira de duas portas">Geladeira de duas portas <button onclick="showModal('Geladeira de duas portas', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Batedeira com bacia">Batedeira com bacia <button onclick="showModal('Batedeira com bacia', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Máquina de lavar louça">Máquina de lavar louça <button onclick="showModal('Máquina de lavar louça', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Grelhador elétrico">Grelhador elétrico <button onclick="showModal('Grelhador elétrico', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Liquidificador">Liquidificador <button onclick="showModal('Liquidificador', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Varinha Mágica">Varinha Mágica <button onclick="showModal('Varinha Mágica', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Multiprocessador">Multiprocessador <button onclick="showModal('Multiprocessador', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Reservatório de água">Reservatório de água <button onclick="showModal('Reservatório de água', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Frigo bar">Frigo bar <button onclick="showModal('Frigo bar', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Torradeira">Torradeira <button onclick="showModal('Torradeira', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Tostadeira">Tostadeira <button onclick="showModal('Tostadeira', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Panela de pressão">Panela de pressão <button onclick="showModal('Panela de pressão', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Assadeiras">Assadeiras <button onclick="showModal('Assadeiras', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Frigideira">Frigideira <button onclick="showModal('Frigideira', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Jogo de panelas antiaderente">Jogo de panelas antiaderente <button onclick="showModal('Jogo de panelas antiaderente', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Pratos">Pratos <button onclick="showModal('Pratos', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Copos">Copos <button onclick="showModal('Copos', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Taças">Taças <button onclick="showModal('Taças', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Talheres">Talheres <button onclick="showModal('Talheres', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Pirex">Pirex <button onclick="showModal('Pirex', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Banho-maria">Banho-maria <button onclick="showModal('Banho-maria', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Saladeira">Saladeira <button onclick="showModal('Saladeira', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Fruteira">Fruteira <button onclick="showModal('Fruteira', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Petisqueiras">Petisqueiras <button onclick="showModal('Petisqueiras', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Conchas">Conchas <button onclick="showModal('Conchas', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Taças para sobremesa">Taças para sobremesa <button onclick="showModal('Taças para sobremesa', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Escorredor de louça">Escorredor de louça <button onclick="showModal('Escorredor de louça', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Potes para tempero">Potes para tempero <button onclick="showModal('Potes para tempero', 'Cozinha')">Reservar</button></li>
+      <li data-gift="Kit Churrasco">Kit Churrasco <button onclick="showModal('Kit Churrasco', 'Cozinha')">Reservar</button></li>
+    </ul>
+
+    <h2>Decoração</h2>
+    <ul data-category="Decoração">
+      <li data-gift="Porta-retratos">Porta-retratos <button onclick="showModal('Porta-retratos', 'Decoração')">Reservar</button></li>
+      <li data-gift="Castiçal">Castiçal <button onclick="showModal('Castiçal', 'Decoração')">Reservar</button></li>
+      <li data-gift="Relógio de parede">Relógio de parede <button onclick="showModal('Relógio de parede', 'Decoração')">Reservar</button></li>
+      <li data-gift="Cadeira de balanço">Cadeira de balanço <button onclick="showModal('Cadeira de balanço', 'Decoração')">Reservar</button></li>
+      <li data-gift="Mesa plástica">Mesa plástica <button onclick="showModal('Mesa plástica', 'Decoração')">Reservar</button></li>
+      <li data-gift="Cadeiras plásticas">Cadeiras plásticas <button onclick="showModal('Cadeiras plásticas', 'Decoração')">Reservar</button></li>
+      <li data-gift="Abajur">Abajur <button onclick="showModal('Abajur', 'Decoração')">Reservar</button></li>
+      <li data-gift="Vasos decorativos">Vasos decorativos <button onclick="showModal('Vasos decorativos', 'Decoração')">Reservar</button></li>
+    </ul>
+
+    <h2>Lavanderia</h2>
+    <ul data-category="Lavanderia">
+      <li data-gift="Aspirador de pó">Aspirador de pó <button onclick="showModal('Aspirador de pó', 'Lavanderia')">Reservar</button></li>
+      <li data-gift="Tábua de passar roupa">Tábua de passar roupa <button onclick="showModal('Tábua de passar roupa', 'Lavanderia')">Reservar</button></li>
+      <li data-gift="Máquina de lavar e secar roupas">Máquina de lavar e secar roupas <button onclick="showModal('Máquina de lavar e secar roupas', 'Lavanderia')">Reservar</button></li>
+    </ul>
+
+    <h2>Jardim</h2>
+    <ul data-category="Jardim">
+      <li data-gift="Mesa de jardim">Mesa de jardim <button onclick="showModal('Mesa de jardim', 'Jardim')">Reservar</button></li>
+      <li data-gift="Cadeiras de jardim">Cadeiras de jardim <button onclick="showModal('Cadeiras de jardim', 'Jardim')">Reservar</button></li>
+      <li data-gift="Espreguiçadeiras">Espreguiçadeiras <button onclick="showModal('Espreguiçadeiras', 'Jardim')">Reservar</button></li>
+    </ul>
+
+    <h2>Contribuições em numerário</h2>
+    <div class="bank">
+      <p><strong>Titular:</strong> Pinel Cuetule<br/>BCI NIB: 000800000000000000000</p>
+      <p><strong>Titular:</strong> Avelina Madala<br/>BIM NIB: 000100000000000000000</p>
+    </div>
+  </div>
+
+  <div class="modal" id="reserveModal">
+    <div class="modal-content">
+      <h3>Reservar Presente</h3>
+      <p id="modal-gift"></p>
+      <input type="text" id="guest-name" placeholder="Digite seu nome">
+      <textarea id="guest-comment" placeholder="Deixe um comentário (opcional)"></textarea>
+      <button onclick="confirmReservation()">Confirmar</button>
+      <button onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Obrigado por partilhar este momento especial connosco ❤</p>
+  </footer>
+
+  <script>
+    let currentGift = '';
+    let currentCategory = '';
+
+    // Carregar estado dos presentes do localStorage
+    function loadReservations() {
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '{}');
+      document.querySelectorAll('li[data-gift]').forEach(item => {
+        const gift = item.getAttribute('data-gift');
+        if (reservations[gift]) {
+          item.classList.add('reserved');
+          item.querySelector('button').disabled = true;
+          item.querySelector('button').textContent = `Reservado por ${reservations[gift].name}${reservations[gift].comment ? ' (Comentário: ' + reservations[gift].comment + ')' : ''}`;
+        }
+      });
+      updateAvailableCount();
+    }
+
+    // Mostrar modal para reservar presente
+    function showModal(gift, category) {
+      currentGift = gift;
+      currentCategory = category;
+      document.getElementById('modal-gift').textContent = `Presente: ${gift}`;
+      document.getElementById('reserveModal').style.display = 'flex';
+      document.getElementById('guest-name').value = '';
+      document.getElementById('guest-comment').value = '';
+      document.getElementById('guest-name').focus();
+    }
+
+    // Fechar modal
+    function closeModal() {
+      document.getElementById('reserveModal').style.display = 'none';
+    }
+
+    // Confirmar reserva
+    function confirmReservation() {
+      const guestName = document.getElementById('guest-name').value.trim();
+      const guestComment = document.getElementById('guest-comment').value.trim();
+      if (!guestName) {
+        alert('Por favor, insira seu nome.');
+        return;
+      }
+      const reservations = JSON.parse(localStorage.getItem('reservations') || '{}');
+      reservations[currentGift] = { name: guestName, comment: guestComment };
+      localStorage.setItem('reservations', JSON.stringify(reservations));
+
+      const item = document.querySelector(`li[data-gift="${currentGift}"]`);
+      item.classList.add('reserved');
+      item.querySelector('button').disabled = true;
+      item.querySelector('button').textContent = `Reservado por ${guestName}${guestComment ? ' (Comentário: ' + guestComment + ')' : ''}`;
+
+      // Enviar e-mail de confirmação via EmailJS
+      const templateParams = {
+        gift: currentGift,
+        category: currentCategory,
+        guest_name: guestName,
+        comment: guestComment || 'Nenhum'
+      };
+
+      emailjs.send('service_dummy_123', 'template_dummy_123', templateParams)
+        .then(function(response) {
+          console.log('E-mail enviado com sucesso!', response.status, response.text);
+          alert('Reserva confirmada! Um e-mail de notificação foi enviado automaticamente para os noivos.');
+        }, function(error) {
+          console.log('Erro ao enviar e-mail:', error);
+          alert('Reserva confirmada, mas houve um erro ao enviar o e-mail. Verifique o console para detalhes. (Use dados dummy, configure sua conta EmailJS para funcionar.)');
+        });
+
+      closeModal();
+      updateAvailableCount();
+    }
+
+    // Atualizar contador de presentes disponíveis
+    function updateAvailableCount() {
+      const total = document.querySelectorAll('li[data-gift]').length;
+      const reserved = document.querySelectorAll('li.reserved').length;
+      document.getElementById('available-count').textContent = `${total - reserved} de ${total}`;
+    }
+
+    // Filtrar por categoria
+    document.getElementById('category-filter').addEventListener('change', function() {
+      const selectedCategory = this.value;
+      document.querySelectorAll('h2, ul').forEach(element => {
+        if (element.tagName === 'UL') {
+          const category = element.getAttribute('data-category');
+          element.style.display = (selectedCategory === 'all' || selectedCategory === category) ? 'block' : 'none';
+        } else if (element.tagName === 'H2') {
+          const category = element.textContent;
+          element.style.display = (selectedCategory === 'all' || selectedCategory === category) ? 'block' : 'none';
+        }
+      });
+    });
+
+    // Carregar reservas ao iniciar
+    window.onload = loadReservations;
+
+    // Fechar modal ao clicar fora
+    document.getElementById('reserveModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>
